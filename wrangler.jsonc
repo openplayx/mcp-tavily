@@ -1,0 +1,23 @@
+{
+  // OpenPlayX web search proxy (Tavily) on Cloudflare Workers: mcp-tavily.openplayx.com
+  "name": "mcp-tavily",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-10-01",
+  "workers_dev": false,
+  "routes": [{ "pattern": "mcp-tavily.openplayx.com", "custom_domain": true }],
+  "durable_objects": {
+    "bindings": [{ "name": "QUOTA", "class_name": "Quota" }]
+  },
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["Quota"] }],
+  "vars": {
+    // Kill switch: "false" makes /v1/search answer 503 search_disabled and
+    // the app falls back to its keyless engines.
+    "SEARCH_ENABLED": "true",
+    "DEVICE_DAILY_LIMIT": "50",
+    "IP_DAILY_LIMIT": "200",
+    "GLOBAL_DAILY_LIMIT": "500",
+    "TAVILY_ENDPOINT": "https://api.tavily.com/search"
+  },
+  // Secret (never in this file): TAVILY_API_KEY
+  "observability": { "enabled": true }
+}
