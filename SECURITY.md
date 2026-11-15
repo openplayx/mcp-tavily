@@ -1,13 +1,18 @@
-# 安全策略
+# Security policy
 
-## 报告漏洞
+## Reporting a vulnerability
 
-请通过 GitHub 私下报告：打开仓库的 **Security** 页，选择 **Report a vulnerability**。不要用公开的 issue 或 PR 报告安全问题。
+Please report vulnerabilities privately through GitHub: open the repository's
+**Security** tab and choose **Report a vulnerability**. Do not open a public
+issue or pull request for a security problem.
 
-请写明受影响的 commit、复现步骤和可能的影响，一般一周内会有初步回复。
+Include the affected commit, how to reproduce it, and the impact you expect.
+You should get a first answer within a week.
 
-范围包括：绕过额度限制、泄露 `TAVILY_API_KEY`、通过 Worker 访问非预期的地址等。
+In scope, for example: bypassing the quotas, leaking `TAVILY_API_KEY`, or
+making the Worker fetch unintended addresses.
 
-## 支持的版本
+## Supported versions
 
-只修复 `main` 的最新提交，以及 `mcp-tavily.openplayx.com` 上正在运行的版本。
+Only the latest commit on `main` and the instance running at
+`mcp-tavily.openplayx.com` receive fixes.
