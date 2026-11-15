@@ -10,8 +10,8 @@
   },
   "migrations": [{ "tag": "v1", "new_sqlite_classes": ["Quota"] }],
   "vars": {
-    // Kill switch: "false" makes /v1/search answer 503 search_disabled and
-    // the app falls back to its keyless engines.
+    // Kill switch: "false" makes web_search answer service_unavailable (503);
+    // the app has no other search engine.
     "SEARCH_ENABLED": "true",
     "DEVICE_DAILY_LIMIT": "50",
     "IP_DAILY_LIMIT": "200",

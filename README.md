@@ -1,6 +1,8 @@
 # mcp-tavily
 
-OpenPlayX 的联网搜索 MCP 服务，后端用 Tavily，跑在 Cloudflare Workers 上：`https://mcp-tavily.openplayx.com/mcp`。
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
+[OpenPlayX](https://github.com/openplayx/openplayx) 的联网搜索 MCP 服务，后端用 Tavily，跑在 Cloudflare Workers 上：`https://mcp-tavily.openplayx.com/mcp`。
 
 App 把它当作**预置的外部能力**内置（`lib/services/external/external_presets.dart`）：首次启动时自动添加到「AI → 外部能力」，AI 看到的工具名是 `mcp_tavily_web_search`。用户删掉后不会再自动加回来。
 
@@ -37,14 +39,46 @@ App 把它当作**预置的外部能力**内置（`lib/services/external/externa
 - 安装 ID 可以随意更换，所以按安装的额度只是软限制。真正控制费用的是全局上限，再加上在 Tavily 后台设置的消费上限。
 - 改了工具定义时，要同步修改 App 里打包的那份定义（`ExternalPresets.tavily.toolDefs`）；App 的 live 测试会比对两边是否一致。
 
+## 在其他 MCP 客户端中使用
+
+托管实例只为 OpenPlayX App 提供，额度很小。在其他客户端里使用，请按下文自行部署，然后这样配置：
+
+```json
+{
+  "mcpServers": {
+    "tavily": {
+      "type": "http",
+      "url": "https://<你的域名>/mcp",
+      "headers": { "Authorization": "Bearer <任意 16–64 位字母数字 ID>" }
+    }
+  }
+}
+```
+
 ## 开发与部署
+
+需要 Node.js 20+；部署需要 Cloudflare 账号（Durable Objects 使用 SQLite 后端，免费计划可用）和 [Tavily](https://tavily.com) API key。
 
 ```bash
 npm install
 npm run smoke        # 本地端到端：wrangler dev + 模拟 Tavily，小额度
-npx wrangler deploy  # 部署到 mcp-tavily.openplayx.com（自定义域名，自动配置 DNS 和证书）
+npx wrangler deploy  # 部署（按 wrangler.jsonc 的 routes 绑定自定义域名，自动配置 DNS 和证书）
 npx wrangler secret put TAVILY_API_KEY   # 或在控制台 Settings → Variables and Secrets 添加
 npx wrangler tail    # 实时日志
 ```
 
+自行部署时，把 `wrangler.jsonc` 里的 `routes` 改成你自己在 Cloudflare 上的域名，或者删掉 `routes`、把 `workers_dev` 设为 `true`，使用 `*.workers.dev` 地址。本地开发需要的变量放在 `.dev.vars` 里（已被 git 忽略）。
+
 修改额度：改 `wrangler.jsonc` 里的 `vars`，然后重新部署，App 不用发版。
+
+## 参与贡献
+
+欢迎提 issue 和 PR，见 [CONTRIBUTING.md](CONTRIBUTING.md)。安全问题请按 [SECURITY.md](SECURITY.md) 私下报告。
+
+## 声明
+
+本项目与 Tavily 没有关联。搜索结果来自 Tavily 和第三方网站，不保证准确。自行部署时，需遵守 Tavily 的服务条款，费用由部署者承担。
+
+## 许可证
+
+[MIT](LICENSE)
